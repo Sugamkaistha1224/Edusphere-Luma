@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Edu-Sphere Learning Platform</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+    background: #f0f4f8;
+    color: #333;
+    padding-top: 100px; /* Reserve space for fixed nav */
+  }
+
+  header {
+    background: linear-gradient(to right, #0066cc, #3399ff);
+    padding: 1.5rem;
+    color: white;
+    text-align: center;
+    font-size: 1.8rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    z-index: 1000;
+  }
+
+  nav button {
+    background: #0077ff;
+    color: white;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 8px;
+    font-weight: bold;
+    transition: background 0.3s;
+  }
+
+  nav button:hover {
+    background: #005fcc;
+    cursor: pointer;
+  }
+
+  main {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+  }
+
+  section {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease;
+  }
+
+  section:hover {
+    transform: scale(1.01);
+  }
+
+  h2 {
+    margin-top: 0;
+    color: #0077cc;
+  }
+
+  .flashcard {
+    background: #fff;
+    border: 1px solid #ccc;
+    width: 300px;
+    height: 180px;
+    perspective: 1000px;
+    margin: 1rem auto;
+  }
+
+  .flashcard-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+
+  .flashcard:hover .flashcard-inner {
+    transform: rotateY(180deg);
+  }
+
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    padding: 1rem;
+  }
+
+  .flashcard-front {
+    background: #e0f7ff;
+  }
+
+  .flashcard-back {
+    background: #fff3cd;
+    transform: rotateY(180deg);
+  }
+
+  .btn-group {
+    text-align: center;
+    margin-top: 1rem;
+  }
+
+  .btn-group button {
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    border: none;
+    background: #0077cc;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+
+  .btn-group button:hover {
+    background: #005fa3;
+  }
+
+  .progress-container {
+    background: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+
+  .progress-bar {
+    height: 20px;
+    background: #28a745;
+    width: 60%;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+  }
+
+  th, td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  .stars {
+    color: gold;
+  }
+
+  textarea {
+    width: 100%;
+    height: 120px;
+    padding: 1rem;
+    font-family: monospace;
+    margin-top: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  iframe {
+    width: 100%;
+    height: 315px;
+    border-radius: 8px;
+    margin-top: 1rem;
+    border: none;
+  }
+  /* New styles for side popup and toggle button */
+
+  /* Toggle Button */
+  #toggle-popup-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #0077ff;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 1500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #toggle-popup-btn:hover {
+    background: #005fcc;
+  }
+
+  /* Side Popup */
+  #side-popup {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 300px;
+    max-height: 400px;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    overflow-y: auto;
+    font-size: 0.9rem;
+    color: #333;
+    transform: translateX(110%);
+    transition: transform 0.3s ease;
+    z-index: 1400;
+  }
+
+  #side-popup.show {
+    transform: translateX(0);
+  }
+
+  #side-popup h3 {
+    margin-top: 0;
+    color: #0077cc;
+  }
+
+  #side-popup a {
+    display: block;
+    color: #0077cc;
+    text-decoration: none;
+    margin: 0.4rem 0;
+    font-weight: 600;
+  }
+
+  #side-popup a:hover {
+    text-decoration: underline;
+  }
+
+  #side-popup hr {
+    margin: 1rem 0;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+</style>
+
+</head>
+<body>
+  <header>
+    Edu-Sphere Learning Platform
+  </header>
+
+ <nav>
+  <div style="font-weight: bold; font-size: 1.3rem; margin-right: 1rem; color: #0077cc;">
+    <a href="https://about-edusphere.vercel.app/" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+      Edu-Sphere
+    </a>
+  </div>
+  <button onclick="scrollToFeature('flashcards')">Flashcards</button>
+  <button onclick="scrollToFeature('quiz')">Quiz</button>
+  <button onclick="scrollToFeature('habit')">Habits</button>
+  <button onclick="scrollToFeature('catalog')">Courses</button>
+  <button onclick="scrollToFeature('reading')">Reading Log</button>
+  <button onclick="scrollToFeature('markdown')">Notes</button>
+  <button onclick="scrollToFeature('video')">Videos</button>
+</nav>
+
+
+
+  <main>
+    <section id="flashcards">
+  <h2>📚 Flashcard Viewer</h2>
+  <iframe src="https://edu-sphere-flip.vercel.app/" allowfullscreen style="height: 740px;"></iframe>
+</section>
+
+
+    <section id="quiz">
+  <h2>🧠 Quiz App</h2>
+  <iframe src="https://quizworld-eight.vercel.app/" allowfullscreen style="height: 550px;"></iframe>
+</section>
+
+
+
+   <section id="habit">
+  <h2>✅ Task Manager</h2>
+  <iframe src="https://taskmanager1-black.vercel.app/" allowfullscreen style="height: 800px;"></iframe>
+</section>
+
+<style>
+  .course-card {
+  background: #f9f9f9;
+  padding: 1rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease;
+}
+
+.course-card:hover {
+  transform: translateY(-5px);
+  background: #eef6ff;
+}
+
+.course-card h3 {
+  margin-top: 0;
+  color: #0077cc;
+}
+
+.course-card p {
+  margin: 0.4rem 0;
+}
+
+.enroll-btn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+.enroll-btn:hover {
+  background: #1e7e34;
+}
+
+</style>
+
+    <section id="catalog">
+  <h2>📚 Course Catalog</h2>
+  <input type="text" id="courseSearch" placeholder="Search courses..." style="padding: 0.6rem; width: 100%; margin-bottom: 1rem; border-radius: 6px; border: 1px solid #ccc;" />
+
+  <div id="courseList" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+    <!-- Course Card Example -->
+    <div class="course-card" data-title="JavaScript Basics">
+      <h3>JavaScript Basics</h3>
+      <p>⏱ Duration: 3h | 🧩 Beginner</p>
+      <p>Learn variables, functions, loops and more in this crash course.</p>
+      <a href="#" class="enroll-link"><button class="enroll-btn">Enroll</button></a>
+    </div>
+
+    <div class="course-card" data-title="React Fundamentals">
+      <h3>React Fundamentals</h3>
+      <p>⏱ Duration: 5h | 🚀 Intermediate</p>
+      <p>Master components, props, and hooks in React for real-world apps.</p>
+      <a href="#" class="enroll-link"><button class="enroll-btn">Enroll</button></a>
+    </div>
+
+    <div class="course-card" data-title="CSS Grid Mastery">
+      <h3>CSS Grid Mastery</h3>
+      <p>⏱ Duration: 2h | 🎨 Intermediate</p>
+      <p>Design complex layouts easily using modern CSS Grid techniques.</p>
+      <a href="#" class="enroll-link"><button class="enroll-btn">Enroll</button></a>
+    </div>
+
+    <div class="course-card" data-title="Python Programming">
+      <h3>Python Programming</h3>
+      <p>⏱ Duration: 4h | 🧠 Beginner</p>
+      <p>Get started with Python: syntax, conditions, loops, and functions.</p>
+      <a href="#" class="enroll-link"><button class="enroll-btn">Enroll</button></a>
+    </div>
+  </div>
+</section>
+
+<!-- 📌 Modal Iframe Popup -->
+<div id="iframeModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); justify-content:center; align-items:center; z-index:1000;">
+  <div style="position:relative; width:90%; height:80%; background:#fff; border-radius:10px; overflow:hidden;">
+    <button onclick="closeIframeModal()" style="position:absolute; top:10px; right:10px; padding:5px 10px; background:red; color:white; border:none; border-radius:5px; cursor:pointer;">Close</button>
+    <iframe id="enrollIframe" src="" style="width:100%; height:100%; border:none;"></iframe>
+  </div>
+</div>
+<script>
+  // Live Search Functionality
+  const searchInput = document.getElementById("courseSearch");
+  const courses = document.querySelectorAll(".course-card");
+
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase();
+    courses.forEach(course => {
+      const title = course.getAttribute("data-title").toLowerCase();
+      course.style.display = title.includes(query) ? "block" : "none";
+    });
+  });
+
+  // Enroll Button Alert
+  document.querySelectorAll(".enroll-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      alert("Enrollment feature Payment opening");
+    });
+  });
+   // Open iframe modal on enroll
+  const enrollLinks = document.querySelectorAll('.enroll-link');
+  const modal = document.getElementById('iframeModal');
+  const iframe = document.getElementById('enrollIframe');
+
+  enrollLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      iframe.src = "https://couse-s-pay.vercel.app/";
+      modal.style.display = 'flex';
+    });
+  });
+
+  function closeIframeModal() {
+    modal.style.display = 'none';
+    iframe.src = ""; // clear iframe to stop playback
+  }
+</script>
+
+
+    <section id="reading">
+  <h2>📖 Reading Log</h2>
+  <iframe src="https://reading-log-coral.vercel.app/" allowfullscreen style="height: 550px;"></iframe>
+</section>
+
+    <section id="markdown">
+  <h2>📝 Sugam Note</h2>
+  <iframe src="https://sticky-notes-beta-umber.vercel.app/" allowfullscreen style="height: 800px;"></iframe>
+</section>
+
+
+    <section id="video">
+  <h2>🎥 Interactive Video (with Comment Demo)</h2>
+  <iframe src="https://intrective-video-play.vercel.app/" allowfullscreen style="height: 600px;"></iframe>
+  <p><em>Note: This feature is in the working phase.</em></p>
+</section>
+
+<section>
+  <h2>🎓 Staff Video Upload for Students</h2>
+  <iframe src="https://sugamkaistha1224.github.io/school-login/" allowfullscreen style="height: 600px;"></iframe>
+  <p><strong>Note:</strong> This feature is also in the working phase.</p>
+  <ul>
+    <li>1️⃣ Login as <strong>staff</strong> to upload a video and set a password.</li>
+    <li>2️⃣ Then login as <strong>student</strong> using that password to watch the uploaded video.</li>
+  </ul>
+</section>
+</main>
+<!-- Toggle Button -->
+<button id="toggle-popup-btn" aria-label="Toggle Links Menu" title="Links Menu">
+  <i class="fas fa-link"></i>
+</button>
+
+<!-- Side Popup -->
+<div id="side-popup" aria-hidden="true" role="dialog" aria-label="Quick Links">
+  <h3>Quick Links</h3>
+ <a href="https://sugamkaistha1224.github.io/edusphere-enviroments-app/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-network-wired"></i> EduSphere ENV's
+</a>
+<a href="https://sugamkaistha1224.github.io/Edusphere-Dashboard/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-tachometer-alt"></i> Dashboard
+</a>
+<a href="https://sugamkaistha1224.github.io/VirtualZone/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-vr-cardboard"></i> Virtual Zone
+</a>
+<a href="https://software-s-beta.vercel.app/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-cogs"></i> Software-S
+</a>
+<a href="https://sugam-web-os-25.vercel.app/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-desktop"></i> Web-OS-25
+</a>
+<a href="https://sugamkaistha1224.github.io/Edusphere-Official/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-university"></i> Main-Edusphere
+</a>
+<a href="https://sugamkaistha1224.github.io/store-app/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-store"></i> Edusphere APP Store
+</a>
+<hr />
+<a href="https://about-edusphere.vercel.app/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-info-circle"></i> Edu-Sphere About
+</a>
+<a href="https://sugam-hub-official.vercel.app/" target="_blank" rel="noopener noreferrer">
+  <i class="fas fa-hubspot"></i> S-HUB
+</a>
+
+
+</div>
+  <script>
+    function scrollToFeature(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    }
+    // Toggle popup panel
+  const toggleBtn = document.getElementById('toggle-popup-btn');
+  const sidePopup = document.getElementById('side-popup');
+
+  toggleBtn.addEventListener('click', () => {
+    const isShown = sidePopup.classList.toggle('show');
+    sidePopup.setAttribute('aria-hidden', !isShown);
+  });
+
+  // Optional: close popup if clicked outside
+  document.addEventListener('click', (e) => {
+    if (!sidePopup.contains(e.target) && !toggleBtn.contains(e.target)) {
+      sidePopup.classList.remove('show');
+      sidePopup.setAttribute('aria-hidden', true);
+    }
+  });
+  </script>
+</body>
+</html>
