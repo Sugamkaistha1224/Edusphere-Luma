@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Edu-Sphere Learning Platform</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
@@ -264,6 +265,136 @@
 </head>
 <body>
   <header>
+ <!-- 🌐 Hamburger Menu (Top-Left) -->
+<div id="hamburger" onclick="toggleLeftMenu()" style="position: fixed; top: 20px; left: 20px; z-index: 10001; cursor: pointer;">
+  <i class="fas fa-bars" style="font-size: 28px; color: #007bff;"></i>
+</div>
+
+<!-- 📂 Side Slider Menu -->
+<div id="left-side-menu" style="
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 280px;
+  height: 100%;
+  background-color: #f4f4f4;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: left 0.3s ease;
+  z-index: 10000;
+  overflow-y: auto;
+">
+  <h3 style="margin-top: 0; color: black;">🌐 Web Apps</h3>
+
+  <ul style="list-style: none; padding-left: 0;">
+    <li style="margin-bottom: 15px;">
+      <a href="#" onclick="openIframePopup('https://s-hub-dashboard.vercel.app/')" style="text-decoration: none; color: #333; display: flex; align-items: center;">
+        <i class="fas fa-tachometer-alt" style="margin-right: 10px; color: #007bff;"></i> Dashboard
+      </a>
+    </li>
+    <li style="margin-bottom: 15px;">
+      <a href="#" onclick="openIframePopup('https://our-docs.vercel.app/')" style="text-decoration: none; color: #333; display: flex; align-items: center;">
+        <i class="fas fa-file-alt" style="margin-right: 10px; color: #007bff;"></i> Our-Docs
+      </a>
+    </li>
+    <li style="margin-bottom: 15px;">
+      <a href="#" onclick="openIframePopup('https://software-s-beta.vercel.app/')" style="text-decoration: none; color: #333; display: flex; align-items: center;">
+        <i class="fas fa-cogs" style="margin-right: 10px; color: #007bff;"></i> Software-S
+      </a>
+    </li>
+  </ul>
+</div>
+
+<!-- 🪟 iFrame Popup Modal -->
+<div id="iframe-popup" style="
+  display: none;
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  width: 90%;
+  height: 90%;
+  background: white;
+  border: 2px solid #007bff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  z-index: 20000;
+">
+  <div style="background: #007bff; color: white; padding: 10px; text-align: right;">
+    <button onclick="closeIframePopup()" style="background: red; border: none; color: white; padding: 5px 10px; font-size: 16px; cursor: pointer;">✖</button>
+  </div>
+  <iframe id="iframe-content" src="" style="width: 100%; height: 95%; border: none;"></iframe>
+</div>
+
+<script>
+  function toggleLeftMenu() {
+    const menu = document.getElementById('left-side-menu');
+    menu.style.left = (menu.style.left === '0px') ? '-300px' : '0px';
+  }
+
+  function openIframePopup(url) {
+    document.getElementById('iframe-content').src = url;
+    document.getElementById('iframe-popup').style.display = 'block';
+  }
+
+  function closeIframePopup() {
+    document.getElementById('iframe-popup').style.display = 'none';
+    document.getElementById('iframe-content').src = '';
+  }
+</script>
+<script>
+  function openIframePopup(url) {
+    document.getElementById('iframe-content').src = url;
+    document.getElementById('iframe-popup').style.display = 'block';
+  }
+
+  function closeIframePopup() {
+    const popup = document.getElementById('iframe-popup');
+    popup.style.display = 'none';
+    document.getElementById('iframe-content').src = '';
+  }
+
+  // 🔄 Dragging functionality
+  const dragElement = (element, header) => {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    header.onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+      e = e || window.event;
+      e.preventDefault();
+
+      // Get initial mouse cursor position
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+
+      document.onmouseup = closeDragElement;
+      document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+      e = e || window.event;
+      e.preventDefault();
+
+      // Calculate the new cursor position
+      pos1 = pos3 - e.clientX;
+      pos2 = pos4 - e.clientY;
+      pos3 = e.clientX;
+      pos4 = e.clientY;
+
+      // Set the element's new position
+      element.style.top = (element.offsetTop - pos2) + "px";
+      element.style.left = (element.offsetLeft - pos1) + "px";
+    }
+
+    function closeDragElement() {
+      document.onmouseup = null;
+      document.onmousemove = null;
+    }
+  };
+
+  // Activate dragging
+  dragElement(document.getElementById("iframe-popup"), document.getElementById("iframe-header"));
+</script>
+
     Edu-Sphere Learning Platform
   </header>
 
@@ -298,10 +429,14 @@
 
 
 
-   <section id="habit">
+ <section id="habit">
   <h2>✅ Task Manager</h2>
-  <iframe src="https://taskmanager1-black.vercel.app/" allowfullscreen style="height: 800px;"></iframe>
+  <iframe src="https://taskmanager1-black.vercel.app/" allowfullscreen style="height: 800px; width: 100%; border: none;"></iframe>
+  <p style="margin-top: 10px; font-style: italic; color: #333;">
+    🔔 Note: This is fully functional with a connected database.
+  </p>
 </section>
+
 
 <style>
   .course-card {
@@ -429,12 +564,19 @@
     <section id="reading">
   <h2>📖 Reading Log</h2>
   <iframe src="https://reading-log-coral.vercel.app/" allowfullscreen style="height: 550px;"></iframe>
+  <p style="margin-top: 10px; font-style: italic; color: #333;">
+    🔔 Note: This is fully functional with a connected database.
+  </p>
 </section>
 
     <section id="markdown">
   <h2>📝 Sugam Note</h2>
-  <iframe src="https://sticky-notes-beta-umber.vercel.app/" allowfullscreen style="height: 800px;"></iframe>
+  <iframe src="https://sticky-notes-beta-umber.vercel.app/" allowfullscreen style="height: 800px; width: 100%; border: none;"></iframe>
+  <p style="margin-top: 10px; font-style: italic; color: #333;">
+    🔔 Note: This is fully functional with a connected database.
+  </p>
 </section>
+
 
 
     <section id="video">
@@ -453,6 +595,39 @@
   </ul>
 </section>
 </main>
+<!-- 🌐 Toggle Zen AI Button (new ID) -->
+<button id="zen-toggle-btn" aria-label="Open Zen AI" title="Open Zen AI"
+  style="position:fixed; bottom:80px; right:20px; z-index:9999; padding:14px; border:none; border-radius:50%; background:#007bff; color:white; font-size:26px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+  <i class="fas fa-brain"></i>
+</button>
+
+<!-- 🔮 Zen AI iframe Modal (new IDs) -->
+<div id="zen-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.75); justify-content:center; align-items:center; z-index:9998;">
+  <div style="position:relative; width:95%; height:90%; background:#fff; border-radius:12px; overflow:hidden;">
+    <button onclick="closeZenModal()" style="position:absolute; top:10px; right:10px; padding:6px 12px; background:#dc3545; color:#fff; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">
+      Close
+    </button>
+    <iframe id="zen-iframe" src="" style="width:100%; height:100%; border:none;"></iframe>
+  </div>
+</div>
+
+<!-- ✅ JavaScript with updated IDs -->
+<script>
+  const zenToggleBtn = document.getElementById('zen-toggle-btn');
+  const zenModal = document.getElementById('zen-modal');
+  const zenIframe = document.getElementById('zen-iframe');
+
+  zenToggleBtn.addEventListener('click', () => {
+    zenIframe.src = "https://nav-ation-ai-tozr.vercel.app/";
+    zenModal.style.display = 'flex';
+  });
+
+  function closeZenModal() {
+    zenModal.style.display = 'none';
+    zenIframe.src = ""; // clear iframe when closed
+  }
+</script>
+
 <!-- Toggle Button -->
 <button id="toggle-popup-btn" aria-label="Toggle Links Menu" title="Links Menu">
   <i class="fas fa-link"></i>
